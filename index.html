@@ -15,7 +15,7 @@
                 <h3>Target Number:</h3> <h3 id="targetNum">0</h3>
             </div>
             <div class="game">
-                <section class="player partcipant">
+                <section class="partcipant">
                     <h2>Player</h2>
                     <table>
                         <tr>
@@ -27,8 +27,32 @@
                             <td id="playerRemainingDice"></td>
                         </tr>
                     </table>
+                    <h3>Round 1</h3>
+                    <form>
+                        <p>Choose your dice:</p>
+                        <div class="d4 dice">
+                            <label for="d4">d4</label>
+                            <input id="d4" name="playerdice" type="checkbox" value="4">
+                       </div>
+                       <div class="d6 dice">
+                            <label for="d6">d6</label>
+                            <input id="d6" name="playerdice" type="checkbox" value="6">
+                        </div>
+                        <div class="d8 dice">
+                            <label for="d8">d8</label>
+                            <input id="d8" name="playerdice" type="checkbox" value="8">
+                        </div>
+                        <div class="d10 dice">
+                            <label for="d10">d10</label>
+                            <input id="d10" name="playerdice" type="checkbox" value="10">
+                        </div>
+                        <div class="d12 dice">
+                            <label for="d12">d12</label>
+                            <input id="d12" name="playerdice" type="checkbox" value="12"> 
+                        </div>
+                    </form>
                 </section>
-                <section class="opponent partcipant">
+                <section class="partcipant">
                     <h2>Opponent</h2>
                     <table>
                         <tr>
@@ -42,6 +66,11 @@
                     </table>
                 </section>
             </div>
+            <section class="results">
+                <button id="playGame">Play</button>
+                <h2>Results</h2>
+                
+            </section>
         </main>
     </body>
 </html>
