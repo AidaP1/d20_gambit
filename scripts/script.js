@@ -1,30 +1,21 @@
 const diceArr  = [4,6,8,10,12]; // dice available for the game
 const rounds = 3;
-let targetNum = 10; //to be replaced with a random d20 roll
+let targetNum;
 
-/*
-const DiceFactory = (sides) => {
-    return {
-        sides: sides,
-        estRoll: function (mod) {
-            return sides / 2 + mod;
-        }
-    }
-}
-*/
+let playerGameScore = 0;
+let opponentGameScore = 0;
 
 const opponent = {
     _startingDice: [],
     _currentDice: [],
     _moves: [],
     _modifier: 0.5,
-    _order: 'normal',
+    _order: 'reverse',
     get moves () {
-        if (this._order === 'reverse') {
-            return this._moves.reverse();
-        } else {
-            return this._moves;
-        }
+        return this._moves;
+    },
+    get currentDice () {
+        return this._currentDice.join(' ');
     },
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         array.forEach(dice => this._startingDice.push(dice));
@@ -43,7 +34,6 @@ const opponent = {
             if (champDiff > Math.abs(outstandingTgt - challengerRoll)) {
                 champ = challenger;
                 champDiff = Math.abs(outstandingTgt - challengerRoll);
-                
             }
         }
         return champ;
@@ -82,11 +72,21 @@ const opponent = {
             this.getNextBestMove(i)
         }
         this._moves.push(this._currentDice);
+        if (this._order === 'reverse') {
+            this._moves.reverse();
+        }
     }    
 }
 
-
-
+const player = {
+    _startingDice: [],
+    _currentDice: [],
+    getDice: function (array) { //push the dice into an array ordered highest to lowest
+        array.forEach(dice => this._startingDice.push(dice));
+        this._startingDice.sort((a , b) => b - a);
+        this._startingDice.forEach(dice => this._currentDice.push(dice));
+    },
+}
 
 function getTarget () {
     return Math.floor(Math.random() * 20 + 1)
@@ -102,31 +102,56 @@ function rollMove (diceToRollArr) {
     return score;
 }
 
-targetNum = getTarget();
-
-function playRound (round,target,playerArr) {
-    opponent.getDice(diceArr);
-    opponent.getMoves();
+function playRound (round,target,playerArr) { //rolls dice for each and plays
     let playerRoll = rollMove(playerArr);
     let playerRoundScore = Math.abs(target - playerRoll); 
-    let opponentRoll = rollMove(opponent.moves[0])
+    let opponentRoll = rollMove(opponent.moves[round - 1])
     let opponentRoundScore = Math.abs(target - opponentRoll);
     //TESTS
+    /*
+    console.log(`round number ${round}`)
     console.log(`target: ${target}`)
-    console.log(`player roll ${playerRoll}`)
-    console.log(`all oponent moves ${opponent.moves}`)
+    //console.log(`player roll ${playerRoll}`)
+    //console.log(`all oponent moves ${opponent.moves}`)
+    console.log(`opponent dice left ${opponent.currentDice}`)
     console.log(`opponent move: ${opponent.moves[round - 1]}`)
     console.log(`opponent roll: ${opponentRoll}`)
-    console.log(`opponent score: ${opponentRoundScore}`)
+    //console.log(`opponent score: ${opponentRoundScore}`)
+    */
     //ends tests
     if (playerRoundScore === opponentRoundScore) {
         return 'draw'
     } else if (playerRoundScore < opponentRoundScore) {
-        return 'player win'
+        playerGameScore += 1;
+        return 'player wins the round'
     } else {
-        return 'opponent win'
+        opponentGameScore += 1;
+        return 'opponent wins the round'
     }
 }
 
 
-console.log(playRound(1,10,[12,8]))
+function determineWinner (plyrscr,optscr) {
+    if (plyrscr === optscr) {
+        return 'Draw'
+    } else if (plyrscr > optscr) {
+        return  'Player Wins the Game!'
+    } else {
+        return 'Opponent Wins the Game!'
+    }
+}
+
+
+/*
+targetNum = getTarget();
+opponent.getDice(diceArr);
+opponent.getMoves();
+console.log(targetNum)
+console.log(opponent.moves)
+
+
+console.log(playRound(1,targetNum,[12,8]))
+console.log(playRound(2,targetNum,[12,8]))
+console.log(playRound(3,targetNum,[12,8]))
+console.log(opponent._currentDice)
+*/

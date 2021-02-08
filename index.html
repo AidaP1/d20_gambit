@@ -4,5 +4,44 @@
         <title>D20 Gambit</title>
         <meta charset="UTF-8">
         <script src="scripts/script.js" defer></script>
+        <link href="resources/css/style.css" rel="stylesheet" type="text/css">
     </head>
+    <body>
+        <header>
+            <h1>Can you beat teh gambling degenerate?</h1>
+        </header>
+        <main>
+            <div class="target">
+                <h3>Target Number:</h3> <h3 id="targetNum">0</h3>
+            </div>
+            <div class="game">
+                <section class="player partcipant">
+                    <h2>Player</h2>
+                    <table>
+                        <tr>
+                            <td>Total Score</td>
+                            <td id="playerGameScore">0</td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Dice</td>
+                            <td id="playerRemainingDice"></td>
+                        </tr>
+                    </table>
+                </section>
+                <section class="opponent partcipant">
+                    <h2>Opponent</h2>
+                    <table>
+                        <tr>
+                            <td>Total Score</td>
+                            <td id="opponentGameScore">0</td>
+                        </tr>
+                        <tr>
+                            <td>Remaining Dice</td>
+                            <td id="opponentRemainingDice"></td>
+                        </tr>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </body>
 </html>

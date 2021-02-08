@@ -1,0 +1,31 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: 1px solid red;
+}
+
+body {
+    background-color: ivory;
+}
+
+.target {
+    max-width: 150px;
+    margin: 20px auto;
+}
+
+.target h3 {
+    display: inline;
+}
+
+.game {
+    display: flex;
+    align-content: center;
+}
+
+table {
+    border: 1px solid black;
+}
+
+.partcipant {
+    min-width: 200px;
+}
