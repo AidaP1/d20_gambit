@@ -17,11 +17,23 @@ table {
 
 
 button {
-    height: 25px;
+    height: 50px;
     width: 60px;
     font-size: 20px;
     margin: 20px auto;
     display: block;
+}
+
+#playGame {
+    display: '';
+}
+
+#roundTwo {
+    display: none;
+}
+
+#roundThree {
+    display: none;
 }
 
 .target {
@@ -40,6 +52,10 @@ button {
 
 .results {
     width: 100%;
+}
+
+.results p {
+    display: inline;
 }
 
 .partcipant {

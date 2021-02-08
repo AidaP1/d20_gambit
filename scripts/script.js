@@ -1,3 +1,15 @@
+let elPlayerGameScore = document.getElementById('playerGameScore');
+let elPlayerRemainingDice = document.getElementById('playerRemainingDice');
+
+
+
+
+
+
+
+
+
+
 const diceArr  = [4,6,8,10,12]; // dice available for the game
 const rounds = 3;
 let targetNum;
