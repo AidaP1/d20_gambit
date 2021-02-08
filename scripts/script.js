@@ -1,14 +1,20 @@
-let elPlayerGameScore = document.getElementById('playerGameScore');
-let elPlayerRemainingDice = document.getElementById('playerRemainingDice');
-
-
-
-
-
-
-
-
-
+const elTargetNum = document.getElementById('targetNum');
+const elPlayerGameScore = document.getElementById('playerGameScore');
+const elPlayerRemainingDice = document.getElementById('playerRemainingDice');
+const elOpponentGameScore = document.getElementById('opponentGameScore');
+const elOpponentRemainingDice = document.getElementById('opponentRemainingDice');
+const elPlayerD4 = document.getElementById('d4');
+const elPlayerD6 = document.getElementById('d6');
+const elPlayerD8 = document.getElementById('d8');
+const elPlayerD10 = document.getElementById('d10');
+const elPlayerD12 = document.getElementById('d12');
+const elPlayButton = document.getElementById('playGame');
+const elRoundTwo = document.getElementById('roundTwo');
+const elRoundThree = document.getElementById('roundThree');
+const elPlyrResult = document.getElementById('plyrResult');
+const elOpptResult = document.getElementById('oppntResult');
+const elRoundoutcome = document.getElementById('roundOutcome');
+const elFinalOutcome = document.getElementById('finalOutcome');
 
 const diceArr  = [4,6,8,10,12]; // dice available for the game
 const rounds = 3;
@@ -22,7 +28,7 @@ const opponent = {
     _currentDice: [],
     _moves: [],
     _modifier: 0.5,
-    _order: 'reverse',
+    _order: 'normal',
     get moves () {
         return this._moves;
     },
@@ -93,10 +99,41 @@ const opponent = {
 const player = {
     _startingDice: [],
     _currentDice: [],
+    _usedDice: [],
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         array.forEach(dice => this._startingDice.push(dice));
         this._startingDice.sort((a , b) => b - a);
         this._startingDice.forEach(dice => this._currentDice.push(dice));
+    },
+    getArr: function () {
+        let roundArr = [];
+        if (elPlayerD4.checked === true) {
+            roundArr.push(4);
+            document.getElementById('d4-box').style.display = 'none';
+            elPlayerD4.checked = false;
+        }
+        if (elPlayerD6.checked === true) {
+            roundArr.push(6);
+            document.getElementById('d6-box').style.display = 'none';
+            elPlayerD6.checked = false;
+        }
+        if (elPlayerD8.checked === true) {
+            roundArr.push(8);
+            document.getElementById('d8-box').style.display = 'none';
+            elPlayerD8.checked = false;
+        }
+        if (elPlayerD10.checked === true) {
+            roundArr.push(10);
+            document.getElementById('d10-box').style.display = 'none';
+            elPlayerD10.checked = false;
+        }
+        if (elPlayerD12.checked === true) {
+            roundArr.push(12);
+            document.getElementById('d12-box').style.display = 'none';
+            elPlayerD12.checked = false;
+        }
+        //console.log(`plr round arr: ${roundArr}`)
+        return roundArr;
     },
 }
 
@@ -119,31 +156,26 @@ function playRound (round,target,playerArr) { //rolls dice for each and plays
     let playerRoundScore = Math.abs(target - playerRoll); 
     let opponentRoll = rollMove(opponent.moves[round - 1])
     let opponentRoundScore = Math.abs(target - opponentRoll);
-    //TESTS
-    /*
-    console.log(`round number ${round}`)
-    console.log(`target: ${target}`)
-    //console.log(`player roll ${playerRoll}`)
-    //console.log(`all oponent moves ${opponent.moves}`)
-    console.log(`opponent dice left ${opponent.currentDice}`)
-    console.log(`opponent move: ${opponent.moves[round - 1]}`)
-    console.log(`opponent roll: ${opponentRoll}`)
-    //console.log(`opponent score: ${opponentRoundScore}`)
-    */
-    //ends tests
+    elPlyrResult.innerHTML = playerRoll;
+    elOpptResult.innerHTML = opponentRoll;
+    //tests
+    console.log(playerRoll);
+    console.log(opponentRoll);
     if (playerRoundScore === opponentRoundScore) {
         return 'draw'
     } else if (playerRoundScore < opponentRoundScore) {
         playerGameScore += 1;
+        elPlayerGameScore.innerHTML = playerGameScore;
         return 'player wins the round'
     } else {
         opponentGameScore += 1;
+        elOpponentGameScore.innerHTML = opponentGameScore;
         return 'opponent wins the round'
     }
 }
 
 
-function determineWinner (plyrscr,optscr) {
+function determineWinner (plyrscr,optscr) { //score comparison
     if (plyrscr === optscr) {
         return 'Draw'
     } else if (plyrscr > optscr) {
@@ -153,17 +185,37 @@ function determineWinner (plyrscr,optscr) {
     }
 }
 
+targetNum = getTarget()
+elTargetNum.innerHTML = targetNum;
 
-/*
-targetNum = getTarget();
-opponent.getDice(diceArr);
-opponent.getMoves();
-console.log(targetNum)
-console.log(opponent.moves)
+function playRound1 () {
+    elPlayButton.style.display = 'none';
+    player.getDice(diceArr);
+    opponent.getDice(diceArr);
+    opponent.getMoves();
+    const playerArr = player.getArr()
+    const roundOutcome = playRound(1, targetNum, playerArr);
+    elRoundoutcome.innerHTML = roundOutcome;
+    elRoundTwo.style.display = 'block';
+}
 
+function playRound2 () {
+    elRoundTwo.style.display = 'none';
+    const playerArr = player.getArr()
+    const roundOutcome = playRound(2, targetNum, playerArr);
+    elRoundoutcome.innerHTML = roundOutcome;
+    elRoundThree.style.display = 'block';
+}
 
-console.log(playRound(1,targetNum,[12,8]))
-console.log(playRound(2,targetNum,[12,8]))
-console.log(playRound(3,targetNum,[12,8]))
-console.log(opponent._currentDice)
-*/
+function playFinalRound () {
+    elRoundThree.style.display = 'none';
+    const playerArr = player.getArr()
+    const roundOutcome = playRound(2, targetNum, playerArr);
+    elRoundoutcome.innerHTML = roundOutcome;
+    const winner = determineWinner(playerGameScore,opponentGameScore)
+    elFinalOutcome.innerHTML = winner;
+}
+
+elPlayButton.addEventListener('click',playRound1);
+elRoundTwo.addEventListener('click',playRound2);
+elRoundThree.addEventListener('click',playFinalRound);
