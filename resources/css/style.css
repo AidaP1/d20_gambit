@@ -7,7 +7,33 @@ body {
     background-color: ivory;
 }
 
+#how-to-play {
+    position: absolute;
+    border: 2px solid black;
+    background-color: ivory;
+    z-index: 1;
+    max-width: 600px;
+    left: 150px;
+    padding: 10px 20px;
+    visibility: hidden;
+}
+
+nav {
+    position: fixed;
+    top: 0px;
+    right: 150px;
+}
+
+nav button {
+    width: 100px;
+}
+
 h1 {
+    margin: 20px;
+    text-align: center;
+}
+
+.participant h2 {
     text-align: center;
 }
 

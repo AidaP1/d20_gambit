@@ -338,14 +338,30 @@ function reset () {
     player._startingDice.length = 0;
     player._currentDice.length = 0;
     player._usedDice.length = 0;
+    document.getElementById('d4-box').style.display = '';
+    document.getElementById('d6-box').style.display = '';
+    document.getElementById('d8-box').style.display = '';
+    document.getElementById('d10-box').style.display = '';
+    document.getElementById('d12-box').style.display = '';
     elStartButton.style.display = 'block';
-    elPlayerD4.style.display = '';
-    elPlayerD6.style.display = '';
-    elPlayerD8.style.display = '';
-    elPlayerD10.style.display = '';
-    elPlayerD12.style.display = '';
+    elPlayerGameScore.innerHTML = playerGameScore;
+    elOpponentGameScore.innerHTML = opponentGameScore;
+    elPlyrResult.innerHTML = '0';
+    elOpptResult.innerHTML = '0';
+    elRoundoutcome.innerHTML = '';
+    elFinalOutcome.innerHTML = '';
 }
 
+function showInstructions () {
+    document.getElementById('how-to-play').style.visibility = 'visible';
+}
+
+function hideInstructions () {
+    document.getElementById('how-to-play').style.visibility = 'hidden'
+}
+
+document.getElementById('show-aside').addEventListener('click',showInstructions);
+document.getElementById('close-aside').addEventListener('click',hideInstructions);
 
 elStartButton.addEventListener('click',startGame);
 elPlayButton.addEventListener('click',playRound1);
