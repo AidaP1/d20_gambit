@@ -110,8 +110,8 @@ const opponent = {
     }    
 }
 
-const player = {
-    _startingDice: [],
+const player = { //stores info about the player
+    _startingDice: [], 
     _currentDice: [],
     _usedDice: [],
     get currentDice() {
@@ -128,14 +128,14 @@ const player = {
             this._startingDice.forEach(dice => this._currentDice.push(dice));
         }
     },
-    getArr: function () {
+    getArr: function () { // gets the chosen dice from the HTML checkbox
         let index;
         let roundArr = [];
         if (elPlayerD4.checked === true) {
-            roundArr.push(4);
-            document.getElementById('d4-box').style.display = 'none';
-            elPlayerD4.checked = false;
-            index  = this._currentDice.indexOf(4);
+            roundArr.push(4); 
+            document.getElementById('d4-box').style.display = 'none'; // hides the box to prevent re-use
+            elPlayerD4.checked = false; // unticks the box for future rounds
+            index  = this._currentDice.indexOf(4); //removes from the 'remaining dice' array
             this._currentDice.splice(index,1);
         }
         if (elPlayerD6.checked === true) {
@@ -171,7 +171,7 @@ const player = {
         return roundArr;
         
     },
-    checkInput: function () {
+    checkInput: function () { // verifys that the player has chosen some input
         let checkArr = [];
         if (elPlayerD4.checked === true) {
             checkArr.push(4);
@@ -192,11 +192,11 @@ const player = {
     }
 }
 
-function getTarget () {
+function getTarget () { // chosee a random number 1-20
     return Math.floor(Math.random() * 20 + 1)
 }
 
-function rollMove (diceToRollArr) {
+function rollMove (diceToRollArr) { //takes the player/oponent dice for the round and rolls them
     let scoreArr = [];
     diceToRollArr.forEach(function (dice) {
         let roll = Math.floor(Math.random() * dice + 1)
@@ -261,12 +261,12 @@ function checkInput (round) { //checks that the player has selected a valid numb
     return 'valid';
 }
 
-function updateDice() {
+function updateDice() { //updaes the visible remaining dice
     elPlayerRemainingDice.innerHTML = player.currentDiceString;
     elOpponentRemainingDice.innerHTML = opponent.diceTrackString;
 }
 
-function startGame () {
+function startGame () { // deal dice, computer plans it's moves
     targetNum = getTarget()
     //targetNum = 1; // test low numbers
     elTargetNum.innerHTML = targetNum;
@@ -283,7 +283,7 @@ function startGame () {
 }
 
 
-function playRound1 () {
+function playRound1 () { // rolls a round
     const validRound = checkInput(1)
     if (validRound !== 'valid') {
         alert(validRound)
@@ -297,7 +297,7 @@ function playRound1 () {
     updateDice()
 }
 
-function playRound2 () {
+function playRound2 () { // rolls a round
     const validRound = checkInput(2)
     if (validRound !== 'valid') {
         alert(validRound)
@@ -311,7 +311,7 @@ function playRound2 () {
     updateDice()
 }
 
-function playFinalRound () {
+function playFinalRound () { // rolls a round
     const validRound = checkInput(3)
     if (validRound !== 'valid') {
         alert(validRound)
@@ -327,7 +327,7 @@ function playFinalRound () {
     updateDice()
 }
 
-function reset () {
+function reset () { //emptys arrays,resets visual elements, etc
     elResetButton.style.display = 'none';
     opponent._startingDice.length = 0;
     opponent._currentDice.length = 0;
@@ -352,7 +352,7 @@ function reset () {
     elFinalOutcome.innerHTML = '';
 }
 
-function showInstructions () {
+function showInstructions () { 
     document.getElementById('how-to-play').style.visibility = 'visible';
 }
 
