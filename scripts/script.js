@@ -249,6 +249,12 @@ function checkInput (round) { //checks that the player has selected a valid numb
     if (player.currentDice.length - plannedRoll.length < (rounds - round)) {
         return 'You can\'t roll that many dice - you won\'t have enough left!'
     }
+    if (round === 3) {
+        let checkAllUsed = player.checkInput()
+        if (checkAllUsed.length !== player.currentDice.length) {
+            return 'You can\'t finish with dice left - use them!'
+        }
+    }
     return 'valid';
 }
 
