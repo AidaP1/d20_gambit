@@ -7,6 +7,16 @@ body {
     background-color: ivory;
 }
 
+h1 {
+    text-align: center;
+}
+
+main {
+    max-width: 500px;
+    margin: 0 auto;
+    display: block;
+}
+
 table {
     border: 1px solid black;
     display: block;
