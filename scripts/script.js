@@ -8,6 +8,7 @@ const elPlayerD6 = document.getElementById('d6');
 const elPlayerD8 = document.getElementById('d8');
 const elPlayerD10 = document.getElementById('d10');
 const elPlayerD12 = document.getElementById('d12');
+const elStartButton = document.getElementById('startGame');
 const elPlayButton = document.getElementById('playGame');
 const elRoundTwo = document.getElementById('roundTwo');
 const elRoundThree = document.getElementById('roundThree');
@@ -26,6 +27,7 @@ let opponentGameScore = 0;
 const opponent = {
     _startingDice: [],
     _currentDice: [],
+    _diceTracker: [],
     _moves: [],
     _modifier: 0.5,
     _order: 'normal',
@@ -33,12 +35,22 @@ const opponent = {
         return this._moves;
     },
     get currentDice () {
-        return this._currentDice.join(' ');
+        return this._currentDice;
+    },
+    get diceTrackString () {
+        return this._diceTracker.join(', ');
     },
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         array.forEach(dice => this._startingDice.push(dice));
         this._startingDice.sort((a , b) => b - a);
         this._startingDice.forEach(dice => this._currentDice.push(dice));
+        this._startingDice.forEach(dice => this._diceTracker.push(dice));
+    },
+    updateDiceTrack: function (arr) {
+        arr.forEach(function (item) {
+            let i = opponent._diceTracker.indexOf(item);
+            opponent._diceTracker.splice(i,1);
+        })
     },
     guessRoll: function (sides) {
         return sides / 2 + this._modifier
@@ -75,6 +87,7 @@ const opponent = {
             if (Math.abs(targetNum - current) > Math.abs(targetNum - current - this.guessRoll(option))) {
                 thisMove.push(option)
                 thisScore.push(this.guessRoll(option))
+                index = this._currentDice.indexOf(option);
                 if (index > -1) {  //removes the chosen dice from the available pool
                     this._currentDice.splice(index,1);
                 }
@@ -99,42 +112,82 @@ const opponent = {
 const player = {
     _startingDice: [],
     _currentDice: [],
+    get currentDice() {
+        return this._currentDice;
+    },
+    get currentDiceString () {
+        return this._currentDice.join(', ');
+    },
     _usedDice: [],
     getDice: function (array) { //push the dice into an array ordered highest to lowest
-        array.forEach(dice => this._startingDice.push(dice));
-        this._startingDice.sort((a , b) => b - a);
-        this._startingDice.forEach(dice => this._currentDice.push(dice));
+        if (this._startingDice.length === 0) {
+            array.forEach(dice => this._startingDice.push(dice));
+            this._startingDice.sort((a , b) => b - a);
+            this._startingDice.forEach(dice => this._currentDice.push(dice));
+        }
     },
     getArr: function () {
+        let index;
         let roundArr = [];
         if (elPlayerD4.checked === true) {
             roundArr.push(4);
             document.getElementById('d4-box').style.display = 'none';
             elPlayerD4.checked = false;
+            index  = this._currentDice.indexOf(4);
+            this._currentDice.splice(index,1);
         }
         if (elPlayerD6.checked === true) {
             roundArr.push(6);
             document.getElementById('d6-box').style.display = 'none';
             elPlayerD6.checked = false;
+            index  = this._currentDice.indexOf(6);
+            this._currentDice.splice(index,1);
         }
         if (elPlayerD8.checked === true) {
             roundArr.push(8);
             document.getElementById('d8-box').style.display = 'none';
             elPlayerD8.checked = false;
+            index  = this._currentDice.indexOf(8);
+            this._currentDice.splice(index,1);
         }
         if (elPlayerD10.checked === true) {
             roundArr.push(10);
             document.getElementById('d10-box').style.display = 'none';
             elPlayerD10.checked = false;
+            index  = this._currentDice.indexOf(10);
+            this._currentDice.splice(index,1);
         }
         if (elPlayerD12.checked === true) {
             roundArr.push(12);
             document.getElementById('d12-box').style.display = 'none';
             elPlayerD12.checked = false;
+            index  = this._currentDice.indexOf(12);
+            this._currentDice.splice(index,1);
         }
         //console.log(`plr round arr: ${roundArr}`)
+        console.log(this._currentDice)
         return roundArr;
+        
     },
+    checkInput: function () {
+        let checkArr = [];
+        if (elPlayerD4.checked === true) {
+            checkArr.push(4);
+        }
+        if (elPlayerD6.checked === true) {
+            checkArr.push(6);
+        }
+        if (elPlayerD8.checked === true) {
+            checkArr.push(8);
+        }
+        if (elPlayerD10.checked === true) {
+            checkArr.push(10);
+        }
+        if (elPlayerD12.checked === true) {
+            checkArr.push(12);
+        }
+        return checkArr;
+    }
 }
 
 function getTarget () {
@@ -154,19 +207,21 @@ function rollMove (diceToRollArr) {
 function playRound (round,target,playerArr) { //rolls dice for each and plays
     let playerRoll = rollMove(playerArr);
     let playerRoundScore = Math.abs(target - playerRoll); 
-    let opponentRoll = rollMove(opponent.moves[round - 1])
+    let opponentRoll = rollMove(opponent.moves[round - 1]);
+    opponent.updateDiceTrack(opponent.moves[round - 1]);
     let opponentRoundScore = Math.abs(target - opponentRoll);
     elPlyrResult.innerHTML = playerRoll;
     elOpptResult.innerHTML = opponentRoll;
     //tests
-    console.log(playerRoll);
-    console.log(opponentRoll);
+    //console.log(playerRoll);
+    //console.log(opponent.moves[round - 1]);
+    //console.log(opponentRoll);
     if (playerRoundScore === opponentRoundScore) {
-        return 'draw'
+        return 'The round was a draw'
     } else if (playerRoundScore < opponentRoundScore) {
         playerGameScore += 1;
         elPlayerGameScore.innerHTML = playerGameScore;
-        return 'player wins the round'
+        return 'Player wins the round'
     } else {
         opponentGameScore += 1;
         elOpponentGameScore.innerHTML = opponentGameScore;
@@ -177,7 +232,7 @@ function playRound (round,target,playerArr) { //rolls dice for each and plays
 
 function determineWinner (plyrscr,optscr) { //score comparison
     if (plyrscr === optscr) {
-        return 'Draw'
+        return 'It is a Draw'
     } else if (plyrscr > optscr) {
         return  'Player Wins the Game!'
     } else {
@@ -185,37 +240,80 @@ function determineWinner (plyrscr,optscr) { //score comparison
     }
 }
 
-targetNum = getTarget()
-elTargetNum.innerHTML = targetNum;
+function checkInput (round) { //checks that the player has selected a valid number of dice to roll
+    if (elPlayerD4.checked === false && elPlayerD6.checked === false && elPlayerD8.checked === false && elPlayerD10.checked === false && elPlayerD12.checked === false) {
+        return 'You need to roll at least 1 dice!'
+    };
+    const plannedRoll = player.checkInput();
+    console.log(`plyr currdice: ${player.checkInput.length}`)
+    if (player.currentDice.length - plannedRoll.length < (rounds - round)) {
+        return 'You can\'t roll that many dice - you won\'t have enough left!'
+    }
+    return 'valid';
+}
 
-function playRound1 () {
-    elPlayButton.style.display = 'none';
+function updateDice() {
+    elPlayerRemainingDice.innerHTML = player.currentDiceString;
+    elOpponentRemainingDice.innerHTML = opponent.diceTrackString;
+}
+
+function startGame () {
+    targetNum = getTarget()
+    elTargetNum.innerHTML = targetNum;
     player.getDice(diceArr);
     opponent.getDice(diceArr);
     opponent.getMoves();
+    updateDice();
+    elStartButton.style.display = 'none';
+    elPlayButton.style.display = 'block';
+    document.getElementById('playerInputs').style.visibility = 'visible';
+}
+
+
+function playRound1 () {
+    const validRound = checkInput(1)
+    if (validRound !== 'valid') {
+        alert(validRound)
+        return validRound;
+    }
+    elPlayButton.style.display = 'none';
     const playerArr = player.getArr()
     const roundOutcome = playRound(1, targetNum, playerArr);
     elRoundoutcome.innerHTML = roundOutcome;
     elRoundTwo.style.display = 'block';
+    updateDice()
 }
 
 function playRound2 () {
+    const validRound = checkInput(2)
+    if (validRound !== 'valid') {
+        alert(validRound)
+        return validRound;
+    }
     elRoundTwo.style.display = 'none';
     const playerArr = player.getArr()
     const roundOutcome = playRound(2, targetNum, playerArr);
     elRoundoutcome.innerHTML = roundOutcome;
     elRoundThree.style.display = 'block';
+    updateDice()
 }
 
 function playFinalRound () {
-    elRoundThree.style.display = 'none';
+    const validRound = checkInput(3)
+    if (validRound !== 'valid') {
+        alert(validRound)
+        return validRound;
+    }
+    elRoundThree.style.visibility = 'hidden';
     const playerArr = player.getArr()
     const roundOutcome = playRound(2, targetNum, playerArr);
     elRoundoutcome.innerHTML = roundOutcome;
     const winner = determineWinner(playerGameScore,opponentGameScore)
     elFinalOutcome.innerHTML = winner;
+    updateDice()
 }
 
+elStartButton.addEventListener('click',startGame);
 elPlayButton.addEventListener('click',playRound1);
 elRoundTwo.addEventListener('click',playRound2);
 elRoundThree.addEventListener('click',playFinalRound);

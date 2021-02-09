@@ -1,7 +1,6 @@
 * {
     margin: 0;
     padding: 0;
-    border: 1px solid red;
 }
 
 body {
@@ -12,7 +11,8 @@ table {
     border: 1px solid black;
     display: block;
     margin: 10px auto;
-    max-width: 150px;
+    max-width: 180px;
+    
 }
 
 
@@ -24,8 +24,16 @@ button {
     display: block;
 }
 
-#playGame {
+#playerInputs {
+    visibility: hidden;
+}
+
+#startGame {
     display: '';
+}
+
+#playGame {
+    display: none;
 }
 
 #roundTwo {
