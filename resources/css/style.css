@@ -54,6 +54,10 @@ button {
     display: none;
 }
 
+#reset {
+    display: none;
+}
+
 .target {
     max-width: 150px;
     margin: 20px auto;

@@ -12,6 +12,7 @@ const elStartButton = document.getElementById('startGame');
 const elPlayButton = document.getElementById('playGame');
 const elRoundTwo = document.getElementById('roundTwo');
 const elRoundThree = document.getElementById('roundThree');
+const elResetButton = document.getElementById('reset');
 const elPlyrResult = document.getElementById('plyrResult');
 const elOpptResult = document.getElementById('oppntResult');
 const elRoundoutcome = document.getElementById('roundOutcome');
@@ -112,13 +113,14 @@ const opponent = {
 const player = {
     _startingDice: [],
     _currentDice: [],
+    _usedDice: [],
     get currentDice() {
         return this._currentDice;
     },
     get currentDiceString () {
         return this._currentDice.join(', ');
     },
-    _usedDice: [],
+
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         if (this._startingDice.length === 0) {
             array.forEach(dice => this._startingDice.push(dice));
@@ -165,7 +167,7 @@ const player = {
             this._currentDice.splice(index,1);
         }
         //console.log(`plr round arr: ${roundArr}`)
-        console.log(this._currentDice)
+        //console.log('player current dice:' + this._currentDice)
         return roundArr;
         
     },
@@ -207,15 +209,16 @@ function rollMove (diceToRollArr) {
 function playRound (round,target,playerArr) { //rolls dice for each and plays
     let playerRoll = rollMove(playerArr);
     let playerRoundScore = Math.abs(target - playerRoll); 
+    //console.log('opponent moves a: ' + opponent.moves[round - 1]);
     let opponentRoll = rollMove(opponent.moves[round - 1]);
     opponent.updateDiceTrack(opponent.moves[round - 1]);
     let opponentRoundScore = Math.abs(target - opponentRoll);
     elPlyrResult.innerHTML = playerRoll;
     elOpptResult.innerHTML = opponentRoll;
     //tests
-    //console.log(playerRoll);
-    //console.log(opponent.moves[round - 1]);
-    //console.log(opponentRoll);
+    //console.log('player roll: ' + playerRoll);
+    //console.log('opponent moves b: ' + opponent.moves[round - 1]);
+    //console.log('opponent roll: ' + opponentRoll);
     if (playerRoundScore === opponentRoundScore) {
         return 'The round was a draw'
     } else if (playerRoundScore < opponentRoundScore) {
@@ -245,7 +248,7 @@ function checkInput (round) { //checks that the player has selected a valid numb
         return 'You need to roll at least 1 dice!'
     };
     const plannedRoll = player.checkInput();
-    console.log(`plyr currdice: ${player.checkInput.length}`)
+    //console.log(`plyr currdice: ${player.checkInput.length}`)
     if (player.currentDice.length - plannedRoll.length < (rounds - round)) {
         return 'You can\'t roll that many dice - you won\'t have enough left!'
     }
@@ -265,6 +268,7 @@ function updateDice() {
 
 function startGame () {
     targetNum = getTarget()
+    //targetNum = 1; // test low numbers
     elTargetNum.innerHTML = targetNum;
     player.getDice(diceArr);
     opponent.getDice(diceArr);
@@ -273,6 +277,9 @@ function startGame () {
     elStartButton.style.display = 'none';
     elPlayButton.style.display = 'block';
     document.getElementById('playerInputs').style.visibility = 'visible';
+    //console.log(`opponent moves ${opponent.moves[0]}`)
+    //console.log(`opponent moves ${opponent.moves[1]}`)
+    //console.log(`opponent moves ${opponent.moves[2]}`)
 }
 
 
@@ -310,16 +317,38 @@ function playFinalRound () {
         alert(validRound)
         return validRound;
     }
-    elRoundThree.style.visibility = 'hidden';
+    elRoundThree.style.display = 'none';
     const playerArr = player.getArr()
-    const roundOutcome = playRound(2, targetNum, playerArr);
+    const roundOutcome = playRound(3, targetNum, playerArr);
     elRoundoutcome.innerHTML = roundOutcome;
     const winner = determineWinner(playerGameScore,opponentGameScore)
     elFinalOutcome.innerHTML = winner;
+    elResetButton.style.display = 'block';
     updateDice()
 }
+
+function reset () {
+    elResetButton.style.display = 'none';
+    opponent._startingDice.length = 0;
+    opponent._currentDice.length = 0;
+    opponent._diceTracker.length = 0;
+    opponent._moves.length = 0;
+    playerGameScore = 0;
+    opponentGameScore = 0;
+    player._startingDice.length = 0;
+    player._currentDice.length = 0;
+    player._usedDice.length = 0;
+    elStartButton.style.display = 'block';
+    elPlayerD4.style.display = '';
+    elPlayerD6.style.display = '';
+    elPlayerD8.style.display = '';
+    elPlayerD10.style.display = '';
+    elPlayerD12.style.display = '';
+}
+
 
 elStartButton.addEventListener('click',startGame);
 elPlayButton.addEventListener('click',playRound1);
 elRoundTwo.addEventListener('click',playRound2);
 elRoundThree.addEventListener('click',playFinalRound);
+elResetButton.addEventListener('click',reset)
