@@ -8,7 +8,24 @@
     </head>
     <body>
         <header>
-            <h1>Can you beat the gambling degenerate?</h1>
+            <h1>Care for a game?</h1>
+            <aside id="how-to-play">
+                <h3>How to play</h3>
+                <p>D20 Gambit is a game of luck and skill! Each player is given 5 dice, and they play head-to-head
+                    for three rounds. In each round, each player chooses from their remaining dice pool, rolling the dice
+                    to try and get the closest match to the target number.
+                <ul>
+                    <li>The target number is rolled at the start and does not change</li>
+                    <li>Each player gets the same set of Dice</li>
+                    <li>You must play at least one dice in every round</li>
+                    <li>You cannot have any dice left over at the end of the round</li>
+                </ul>
+                </p>
+                <button id="close-aside">Close</button>
+            </aside>
+            <nav>
+                <button id="show-aside">Instructions</button>
+            </nav>
         </header>
         <main>
             <div class="target">
@@ -70,6 +87,7 @@
                 <button id="playGame">Play</button>
                 <button id="roundTwo">Next Round</button>
                 <button id="roundThree">Final Round</button>
+                <button id="reset">Reset</button>
                 <h2>Results</h2>
                 <p>You Rolled a total of: </p><p id="plyrResult">0</p><br>
                 <p>Your opponent rolled a total of: </p><p id="oppntResult">0</p><br>
