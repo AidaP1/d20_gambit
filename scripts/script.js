@@ -63,8 +63,8 @@ const opponent = {
         array.forEach(dice => this._startingDice.push(dice));
         this._startingDice.sort((a , b) => b - a);
         this._startingDice.forEach(function (dice) {
-             this._currentDice.push(dice);
-             this._diceTracker.push(dice);
+             opponent._currentDice.push(dice);
+             opponent._diceTracker.push(dice);
         })
     },
     updateDiceTrack: function (arr) {
