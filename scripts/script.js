@@ -31,7 +31,7 @@ const opponent = {
     _diceTracker: [],
     _moves: [],
     _modifier: 0.5,
-    _order: 'normal',
+    _order: 'sling',
     get moves () {
         return this._moves;
     },
@@ -40,6 +40,24 @@ const opponent = {
     },
     get diceTrackString () {
         return this._diceTracker.join(', ');
+    },
+    getMoveOrder: function () {
+        let o = Math.floor(Math.random() * 4)
+        switch (o) {
+            case 0:
+            this._order = 'normal';
+            break;
+            case 1:
+            this._order = 'reverse';
+            break;
+            case 2:
+            this._order = 'twist';
+            break;
+            default:
+            this._order = 'sling';
+            break;
+        }
+        //console.log(this._order)
     },
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         array.forEach(dice => this._startingDice.push(dice));
@@ -81,7 +99,7 @@ const opponent = {
         if (index > -1) {
             this._currentDice.splice(index,1);
         }
-        for (i = 1; i < availDice; i++) { //runs the function as many times as possible whilst leaving enough dice for subsequent rounds
+        for (i = 1; i < Math.min(availDice,2); i++) { //runs the function up to twice, whilst leaving enough dice for subsequent rounds - stops opponent selling out to win 1 round
 
             let current = thisScore.reduce((acc,currVal) => acc + currVal);
             let option = this.getNextBestDice(outstandingTgt);
@@ -99,13 +117,24 @@ const opponent = {
         }
         this._moves.push(thisMove);
     },
-    getMoves: function () {
+    getMoves: function () { //runs the nextBestMove function to create moves for each round. Then mutates the array to provide unexpected behaviour in the roll order
         for (let i = 0; i < rounds - 1; i++) {
             this.getNextBestMove(i)
         }
         this._moves.push(this._currentDice);
+        this.getMoveOrder();
+        let arr = [];
+        this._moves.forEach(i => arr.push(i))
         if (this._order === 'reverse') {
             this._moves.reverse();
+        };
+        if (this._order === 'twist') {
+            this._moves[0] = arr[1];
+            this._moves[1] = arr[0];
+        }
+        if (this._order === 'sling') {
+            this._moves[1] = arr[2];
+            this._moves[2] = arr[1];
         }
     }    
 }
@@ -350,6 +379,7 @@ function reset () { //emptys arrays,resets visual elements, etc
     elOpptResult.innerHTML = '0';
     elRoundoutcome.innerHTML = '';
     elFinalOutcome.innerHTML = '';
+    elTargetNum.innerHTML = '';
 }
 
 function showInstructions () { 
