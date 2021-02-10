@@ -62,11 +62,13 @@ const opponent = {
     getDice: function (array) { //push the dice into an array ordered highest to lowest
         array.forEach(dice => this._startingDice.push(dice));
         this._startingDice.sort((a , b) => b - a);
-        this._startingDice.forEach(dice => this._currentDice.push(dice));
-        this._startingDice.forEach(dice => this._diceTracker.push(dice));
+        this._startingDice.forEach(function (dice) {
+             this._currentDice.push(dice);
+             this._diceTracker.push(dice);
+        })
     },
     updateDiceTrack: function (arr) {
-        arr.forEach(function (item) {
+        arr.forEach(function (item,index) {
             let i = opponent._diceTracker.indexOf(item);
             opponent._diceTracker.splice(i,1);
         })
