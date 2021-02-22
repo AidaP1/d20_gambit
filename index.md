@@ -18,7 +18,7 @@
                     <li>The target number is rolled at the start and does not change</li>
                     <li>Each player gets the same set of Dice</li>
                     <li>You must play at least one dice in every round</li>
-                    <li>You cannot have any dice left over at the end of the round</li>
+                    <li>You cannot have any dice left over at the end of the game</li>
                 </ul>
                 </p>
                 <button id="close-aside">Close</button>
