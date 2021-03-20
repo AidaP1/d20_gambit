@@ -1,0 +1,25 @@
+{
+  "name": "d20_gambit",
+  "version": "1.0.0",
+  "description": "a DnD gambling game",
+  "main": "./scripts/main.js",
+  "scripts": {
+    "test": "mocha ./scripts/test/ --recursive"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AidaP1/d20_gambit.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Aidan Pilgrim",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AidaP1/d20_gambit/issues"
+  },
+  "homepage": "https://github.com/AidaP1/d20_gambit#readme",
+  "devDependencies": {
+    "mocha": "^8.3.2"
+  }
+}
